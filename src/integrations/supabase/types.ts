@@ -14,13 +14,107 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      offerwall_transactions: {
+        Row: {
+          created_at: string
+          points: number
+          tx_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          points: number
+          tx_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          points?: number
+          tx_id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          display_name: string | null
+          email: string | null
+          id: string
+          points: number
+          total_earned_points: number
+        }
+        Insert: {
+          created_at?: string
+          display_name?: string | null
+          email?: string | null
+          id: string
+          points?: number
+          total_earned_points?: number
+        }
+        Update: {
+          created_at?: string
+          display_name?: string | null
+          email?: string | null
+          id?: string
+          points?: number
+          total_earned_points?: number
+        }
+        Relationships: []
+      }
+      withdrawals: {
+        Row: {
+          account_number: string
+          amount_usd: number
+          created_at: string
+          id: string
+          method: string
+          points_spent: number
+          processed_at: string | null
+          status: string
+          user_id: string
+        }
+        Insert: {
+          account_number: string
+          amount_usd: number
+          created_at?: string
+          id?: string
+          method?: string
+          points_spent: number
+          processed_at?: string | null
+          status?: string
+          user_id: string
+        }
+        Update: {
+          account_number?: string
+          amount_usd?: number
+          created_at?: string
+          id?: string
+          method?: string
+          points_spent?: number
+          processed_at?: string | null
+          status?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "withdrawals_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      request_withdrawal: {
+        Args: { p_account_number: string; p_points: number }
+        Returns: string
+      }
     }
     Enums: {
       [_ in never]: never
