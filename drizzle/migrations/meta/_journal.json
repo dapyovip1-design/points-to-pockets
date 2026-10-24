@@ -8,6 +8,13 @@
       "when": 1792834946936,
       "tag": "0000_gpt_site_schema",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1792835184411,
+      "tag": "0001_enable_realtime",
+      "breakpoints": true
     }
   ]
 }
