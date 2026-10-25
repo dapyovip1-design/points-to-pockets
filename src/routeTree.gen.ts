@@ -16,6 +16,7 @@ import { Route as AuthenticatedDashboardRouteImport } from './routes/_authentica
 import { Route as AuthenticatedTasksRouteImport } from './routes/_authenticated/tasks'
 import { Route as AuthenticatedWithdrawRouteImport } from './routes/_authenticated/withdraw'
 import { Route as AuthenticatedWithdrawalsRouteImport } from './routes/_authenticated/withdrawals'
+import { Route as ApiPublicAyetPostbackRouteImport } from './routes/api/public/ayet-postback'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -52,6 +53,11 @@ const AuthenticatedWithdrawalsRoute =
     path: '/withdrawals',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const ApiPublicAyetPostbackRoute = ApiPublicAyetPostbackRouteImport.update({
+  id: '/api/public/ayet-postback',
+  path: '/api/public/ayet-postback',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -60,6 +66,7 @@ export interface FileRoutesByFullPath {
   '/tasks': typeof AuthenticatedTasksRoute
   '/withdraw': typeof AuthenticatedWithdrawRoute
   '/withdrawals': typeof AuthenticatedWithdrawalsRoute
+  '/api/public/ayet-postback': typeof ApiPublicAyetPostbackRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -68,6 +75,7 @@ export interface FileRoutesByTo {
   '/tasks': typeof AuthenticatedTasksRoute
   '/withdraw': typeof AuthenticatedWithdrawRoute
   '/withdrawals': typeof AuthenticatedWithdrawalsRoute
+  '/api/public/ayet-postback': typeof ApiPublicAyetPostbackRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -78,13 +86,27 @@ export interface FileRoutesById {
   '/_authenticated/tasks': typeof AuthenticatedTasksRoute
   '/_authenticated/withdraw': typeof AuthenticatedWithdrawRoute
   '/_authenticated/withdrawals': typeof AuthenticatedWithdrawalsRoute
+  '/api/public/ayet-postback': typeof ApiPublicAyetPostbackRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/auth' | '/dashboard' | '/tasks' | '/withdraw' | '/withdrawals'
+    | '/'
+    | '/auth'
+    | '/dashboard'
+    | '/tasks'
+    | '/withdraw'
+    | '/withdrawals'
+    | '/api/public/ayet-postback'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/dashboard' | '/tasks' | '/withdraw' | '/withdrawals'
+  to:
+    | '/'
+    | '/auth'
+    | '/dashboard'
+    | '/tasks'
+    | '/withdraw'
+    | '/withdrawals'
+    | '/api/public/ayet-postback'
   id:
     | '__root__'
     | '/'
@@ -94,12 +116,14 @@ export interface FileRouteTypes {
     | '/_authenticated/tasks'
     | '/_authenticated/withdraw'
     | '/_authenticated/withdrawals'
+    | '/api/public/ayet-postback'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
+  ApiPublicAyetPostbackRoute: typeof ApiPublicAyetPostbackRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -153,6 +177,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedWithdrawalsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/api/public/ayet-postback': {
+      id: '/api/public/ayet-postback'
+      path: '/api/public/ayet-postback'
+      fullPath: '/api/public/ayet-postback'
+      preLoaderRoute: typeof ApiPublicAyetPostbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -177,6 +208,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
+  ApiPublicAyetPostbackRoute: ApiPublicAyetPostbackRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
