@@ -105,7 +105,7 @@ function Dashboard() {
           </div>
           <ul className="mt-4 space-y-3">
             {recent.data.map((w) => {
-              const s = statusLabels[w.status];
+              const s = statusLabels[w.status] ?? { text: w.status, className: "bg-muted text-muted-foreground" };
               return (
                 <li key={w.id} className="flex items-center justify-between rounded-xl bg-panel px-4 py-3">
                   <span className="text-sm font-bold" dir="ltr">

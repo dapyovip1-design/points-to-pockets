@@ -88,7 +88,7 @@ function WithdrawalsPage() {
       ) : (
         <ul className="space-y-3">
           {data.map((w) => {
-            const s = statusMeta[w.status];
+            const s = statusMeta[w.status] ?? { text: w.status, className: "bg-muted text-muted-foreground border border-border", icon: "•" };
             return (
               <li key={w.id} className="card-glow rounded-2xl p-5">
                 <div className="flex flex-wrap items-center justify-between gap-3">
