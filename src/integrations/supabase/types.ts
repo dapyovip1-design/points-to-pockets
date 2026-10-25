@@ -111,6 +111,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      credit_offerwall_points: {
+        Args: { p_points: number; p_user_id: string }
+        Returns: undefined
+      }
       request_withdrawal: {
         Args: { p_account_number: string; p_points: number }
         Returns: string
