@@ -36,7 +36,7 @@ function TasksPage() {
       ) : (
         <div className="overflow-hidden rounded-3xl border border-border bg-card">
           <iframe
-            src={`https://wall.ayetstudios.com/ed/25713/30627/${profile.id}`}
+            src={`https://offerwall.ayet.io/offers?adSlot=30627&externalIdentifier=${profile.id}`}
             title="جدول المهام والاستبيانات — Ayet Studios"
             className="h-[calc(100vh-230px)] min-h-[480px] w-full"
             loading="lazy"
