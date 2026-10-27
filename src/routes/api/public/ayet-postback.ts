@@ -86,14 +86,17 @@ async function handlePostback({ request }: { request: Request }) {
     }
     const { data: profile } = await admin
       .from("profiles")
-      .select("points")
+      .select("points, total_earned_points")
       .eq("id", original.user_id)
       .maybeSingle();
     const deduct = Math.min(original.points, profile?.points ?? 0);
     if (deduct > 0) {
       await admin
         .from("profiles")
-        .update({ points: (profile!.points ?? 0) - deduct })
+        .update({
+          points: (profile!.points ?? 0) - deduct,
+          total_earned_points: Math.max((profile!.total_earned_points ?? 0) - deduct, 0),
+        })
         .eq("id", original.user_id);
     }
     await admin
