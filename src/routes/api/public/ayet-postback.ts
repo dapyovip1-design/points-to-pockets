@@ -86,7 +86,7 @@ async function handlePostback({ request }: { request: Request }) {
     }
     const { data: profile } = await admin
       .from("profiles")
-      .select("points")
+      .select("points, total_earned_points")
       .eq("id", original.user_id)
       .maybeSingle();
     const deduct = Math.min(original.points, profile?.points ?? 0);
