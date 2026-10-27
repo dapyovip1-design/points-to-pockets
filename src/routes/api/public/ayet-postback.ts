@@ -93,7 +93,10 @@ async function handlePostback({ request }: { request: Request }) {
     if (deduct > 0) {
       await admin
         .from("profiles")
-        .update({ points: (profile!.points ?? 0) - deduct })
+        .update({
+          points: (profile!.points ?? 0) - deduct,
+          total_earned_points: Math.max((profile!.total_earned_points ?? 0) - deduct, 0),
+        })
         .eq("id", original.user_id);
     }
     await admin
