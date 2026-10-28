@@ -62,37 +62,111 @@ export type Database = {
         }
         Relationships: []
       }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      withdrawal_events: {
+        Row: {
+          action: string
+          actor: string | null
+          created_at: string
+          from_status: string | null
+          id: string
+          note: string | null
+          reference_number: string | null
+          to_status: string | null
+          withdrawal_id: string
+        }
+        Insert: {
+          action: string
+          actor?: string | null
+          created_at?: string
+          from_status?: string | null
+          id?: string
+          note?: string | null
+          reference_number?: string | null
+          to_status?: string | null
+          withdrawal_id: string
+        }
+        Update: {
+          action?: string
+          actor?: string | null
+          created_at?: string
+          from_status?: string | null
+          id?: string
+          note?: string | null
+          reference_number?: string | null
+          to_status?: string | null
+          withdrawal_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "withdrawal_events_withdrawal_id_fkey"
+            columns: ["withdrawal_id"]
+            isOneToOne: false
+            referencedRelation: "withdrawals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       withdrawals: {
         Row: {
           account_number: string
+          admin_note: string | null
           amount_usd: number
           created_at: string
           id: string
           method: string
+          paid_by: string | null
           points_spent: number
           processed_at: string | null
+          reference_number: string | null
+          refunded: boolean
           status: string
           user_id: string
         }
         Insert: {
           account_number: string
+          admin_note?: string | null
           amount_usd: number
           created_at?: string
           id?: string
           method?: string
+          paid_by?: string | null
           points_spent: number
           processed_at?: string | null
+          reference_number?: string | null
+          refunded?: boolean
           status?: string
           user_id: string
         }
         Update: {
           account_number?: string
+          admin_note?: string | null
           amount_usd?: number
           created_at?: string
           id?: string
           method?: string
+          paid_by?: string | null
           points_spent?: number
           processed_at?: string | null
+          reference_number?: string | null
+          refunded?: boolean
           status?: string
           user_id?: string
         }
@@ -111,9 +185,32 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      admin_approve_withdrawal: {
+        Args: { p_withdrawal_id: string }
+        Returns: undefined
+      }
+      admin_confirm_payment: {
+        Args: { p_reference: string; p_withdrawal_id: string }
+        Returns: undefined
+      }
+      admin_reject_withdrawal: {
+        Args: { p_note: string; p_withdrawal_id: string }
+        Returns: undefined
+      }
+      admin_start_payment: {
+        Args: { p_withdrawal_id: string }
+        Returns: undefined
+      }
       credit_offerwall_points: {
         Args: { p_points: number; p_user_id: string }
         Returns: undefined
+      }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
       }
       request_withdrawal: {
         Args: { p_account_number: string; p_points: number }
@@ -121,7 +218,7 @@ export type Database = {
       }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -248,6 +345,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin"],
+    },
   },
 } as const
