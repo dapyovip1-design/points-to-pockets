@@ -1,5 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import type { SupabaseClient } from "@supabase/supabase-js";
+import type { Database } from "@/integrations/supabase/types";
 
 /**
  * Admin server functions for the manual withdrawal pipeline.
@@ -17,7 +19,7 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 const ACTIONS = ["approve", "start", "reject", "pay"] as const;
 type Action = (typeof ACTIONS)[number];
 
-async function assertAdmin(supabase: ReturnType<typeof requireClient>, userId: string) {
+async function assertAdmin(supabase: SupabaseClient<Database>, userId: string) {
   const { data, error } = await supabase.rpc("has_role", {
     _user_id: userId,
     _role: "admin",
@@ -25,11 +27,6 @@ async function assertAdmin(supabase: ReturnType<typeof requireClient>, userId: s
   if (error || data !== true) {
     throw new Error("غير مصرح لك بهذا الإجراء");
   }
-}
-
-function requireClient() {
-  // Placeholder type helper so assertAdmin can reference the middleware client.
-  throw new Error("internal");
 }
 
 export const adminListWithdrawals = createServerFn({ method: "GET" })
@@ -65,7 +62,14 @@ export const adminWithdrawalAction = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     await assertAdmin(context.supabase, context.userId);
 
-    let rpc: { name: "admin_approve_withdrawal" | "admin_start_payment" | "admin_reject_withdrawal" | "admin_confirm_payment"; args: Record<string, unknown> };
+    let rpc: {
+      name:
+        | "admin_approve_withdrawal"
+        | "admin_start_payment"
+        | "admin_reject_withdrawal"
+        | "admin_confirm_payment";
+      args: Record<string, unknown>;
+    };
     switch (data.action) {
       case "approve":
         rpc = { name: "admin_approve_withdrawal", args: { p_withdrawal_id: data.id } };
