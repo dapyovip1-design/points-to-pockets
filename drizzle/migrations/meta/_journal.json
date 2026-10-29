@@ -36,6 +36,13 @@
       "when": 1793244731420,
       "tag": "0004_restrict_credit_points_execute",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1793244793592,
+      "tag": "0005_drop_old_status_check",
+      "breakpoints": true
     }
   ]
 }
