@@ -11,8 +11,10 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
 type Withdrawal = Database["public"]["Tables"]["withdrawals"]["Row"];
 
 const statusLabels: Record<string, { text: string; className: string }> = {
-  pending: { text: "قيد الانتظار", className: "bg-warning/15 text-warning" },
-  paid: { text: "تم الصرف", className: "bg-success/15 text-success" },
+  pending: { text: "قيد المراجعة", className: "bg-warning/15 text-warning" },
+  approved: { text: "مقبول", className: "bg-primary/15 text-primary" },
+  processing: { text: "قيد الدفع", className: "bg-gold/15 text-gold" },
+  paid: { text: "مدفوع", className: "bg-success/15 text-success" },
   rejected: { text: "مرفوض", className: "bg-destructive/15 text-destructive" },
 };
 

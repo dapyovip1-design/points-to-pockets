@@ -12,8 +12,10 @@ export const Route = createFileRoute("/_authenticated/withdrawals")({
 type Withdrawal = Database["public"]["Tables"]["withdrawals"]["Row"];
 
 const statusMeta: Record<Withdrawal["status"], { text: string; className: string; icon: string }> = {
-  pending: { text: "قيد الانتظار", className: "bg-warning/15 text-warning border border-warning/30", icon: "⏳" },
-  paid: { text: "تم الصرف", className: "bg-success/15 text-success border border-success/30", icon: "✅" },
+  pending: { text: "قيد المراجعة", className: "bg-warning/15 text-warning border border-warning/30", icon: "⏳" },
+  approved: { text: "مقبول", className: "bg-primary/15 text-primary border border-primary/30", icon: "✔️" },
+  processing: { text: "قيد الدفع", className: "bg-gold/15 text-gold border border-gold/30", icon: "💳" },
+  paid: { text: "مدفوع", className: "bg-success/15 text-success border border-success/30", icon: "✅" },
   rejected: { text: "مرفوض", className: "bg-destructive/15 text-destructive border border-destructive/30", icon: "❌" },
 };
 
@@ -100,6 +102,16 @@ function WithdrawalsPage() {
                       {w.points_spent.toLocaleString("en-US")} pts → فودافون كاش{" "}
                       <span className="font-semibold">{w.account_number}</span>
                     </p>
+                    {w.status === "paid" && w.reference_number && (
+                      <p className="mt-1 text-xs font-bold text-success" dir="ltr">
+                        رقم العملية: {w.reference_number}
+                      </p>
+                    )}
+                    {w.status === "rejected" && w.admin_note && (
+                      <p className="mt-1 text-xs font-semibold text-destructive">
+                        سبب الرفض: {w.admin_note}
+                      </p>
+                    )}
                   </div>
                   <span className={`rounded-full px-3 py-1.5 text-xs font-bold ${s.className}`}>
                     {s.icon} {s.text}
