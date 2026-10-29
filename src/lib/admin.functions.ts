@@ -62,40 +62,32 @@ export const adminWithdrawalAction = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     await assertAdmin(context.supabase, context.userId);
 
-    let rpc: {
-      name:
-        | "admin_approve_withdrawal"
-        | "admin_start_payment"
-        | "admin_reject_withdrawal"
-        | "admin_confirm_payment";
-      args: Record<string, unknown>;
-    };
-    switch (data.action) {
-      case "approve":
-        rpc = { name: "admin_approve_withdrawal", args: { p_withdrawal_id: data.id } };
-        break;
-      case "start":
-        rpc = { name: "admin_start_payment", args: { p_withdrawal_id: data.id } };
-        break;
-      case "reject":
-        rpc = {
-          name: "admin_reject_withdrawal",
-          args: { p_withdrawal_id: data.id, p_note: data.note ?? null },
-        };
-        break;
-      case "pay":
-        if (!data.reference || data.reference.length < 3 || data.reference.length > 100) {
-          throw new Error("أدخل رقم مرجع التحويل من فودافون كاش");
-        }
-        rpc = {
-          name: "admin_confirm_payment",
-          args: { p_withdrawal_id: data.id, p_reference: data.reference },
-        };
-        break;
+    if (data.action === "approve") {
+      const { error } = await context.supabase.rpc("admin_approve_withdrawal", {
+        p_withdrawal_id: data.id,
+      });
+      if (error) throw new Error(error.message);
+    } else if (data.action === "start") {
+      const { error } = await context.supabase.rpc("admin_start_payment", {
+        p_withdrawal_id: data.id,
+      });
+      if (error) throw new Error(error.message);
+    } else if (data.action === "reject") {
+      const { error } = await context.supabase.rpc("admin_reject_withdrawal", {
+        p_withdrawal_id: data.id,
+        p_note: data.note ?? null,
+      });
+      if (error) throw new Error(error.message);
+    } else {
+      if (!data.reference || data.reference.length < 3 || data.reference.length > 100) {
+        throw new Error("أدخل رقم مرجع التحويل من فودافون كاش");
+      }
+      const { error } = await context.supabase.rpc("admin_confirm_payment", {
+        p_withdrawal_id: data.id,
+        p_reference: data.reference,
+      });
+      if (error) throw new Error(error.message);
     }
-
-    const { error } = await context.supabase.rpc(rpc.name, rpc.args);
-    if (error) throw new Error(error.message);
     return { ok: true };
   });
 

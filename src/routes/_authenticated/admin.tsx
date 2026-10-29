@@ -33,7 +33,7 @@ type AdminWithdrawal = {
   user_id: string;
   method: string;
   account_number: string;
-  amount_usd: string;
+  amount_usd: number;
   points_spent: number;
   status: string;
   created_at: string;
