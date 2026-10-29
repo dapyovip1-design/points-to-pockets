@@ -29,6 +29,13 @@
       "when": 1793158901200,
       "tag": "0003_withdrawal_admin_system",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1793244731420,
+      "tag": "0004_restrict_credit_points_execute",
+      "breakpoints": true
     }
   ]
 }
