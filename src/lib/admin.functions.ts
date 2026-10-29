@@ -75,7 +75,7 @@ export const adminWithdrawalAction = createServerFn({ method: "POST" })
     } else if (data.action === "reject") {
       const { error } = await context.supabase.rpc("admin_reject_withdrawal", {
         p_withdrawal_id: data.id,
-        p_note: data.note ?? null,
+        p_note: data.note ?? "",
       });
       if (error) throw new Error(error.message);
     } else {
